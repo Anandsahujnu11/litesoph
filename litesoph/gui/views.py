@@ -195,12 +195,19 @@ class WorkManagerPage(ttk.Frame):
         self.engine_source_label.grid(row= 1, column=0,  sticky='w',padx=4, pady=10)       
         self.engine_source_label= CreateToolTip(self.engine_source_label, hoverdict['engine_source_doc'])
 
+   
+
+        
 
 
         self.engine_source = ttk.Combobox(common_frame,width=20, textvariable= self.engine, values= self.engine_list)
         self.engine_source['font'] = myfont()
         self.engine_source.grid(row= 1, column=1, columnspan=2, padx=4, pady=10)
         self.engine_source['state'] = 'readonly'
+
+        
+
+    
 
         self.label_proj = tk.Label(common_frame,text="Job Type",bg=label_design['bg'],fg=label_design['fg'], justify='left')
         self.label_proj['font'] = myfont()

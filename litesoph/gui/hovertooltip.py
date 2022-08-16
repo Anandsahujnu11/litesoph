@@ -1,4 +1,10 @@
 import tkinter as tk
+from tkinter import *
+import webbrowser
+from functools import partial
+
+
+
 
 
 class CreateToolTip(object):
@@ -10,6 +16,7 @@ class CreateToolTip(object):
         self.wraplength = 180   #pixels
         self.widget = widget
         self.text = text
+
         self.widget.bind("<Enter>", self.enter)
         self.widget.bind("<Leave>", self.leave)
         self.widget.bind("<ButtonPress>", self.leave)
