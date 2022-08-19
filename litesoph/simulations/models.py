@@ -209,15 +209,14 @@ class dummyengineModel:
     
      ground_state = {
             'parameter1' : {'type':DT.string, 'values':['param1-value1','param1-value2','param1-value3','param1-value4'], 'default_value': 'param1-default'},
-            'xc' : {'type':DT.string, 'values':["PBE96","PBE0","B3LYP","PW91", "BP86", "BP91","BHLYP","M05","M05-2X","M06-HF","M08-SO","M011","CAM-B3LYP","LC-BLYP","LC-PBE","LC-wPBE","HSE03","HSE06"], 'default_value': "PBE0"},
+            'parameter3' : {'type':DT.string, 'values':['param3-value1','param3-value2','param3-value3','param3-value4'], 'default_value': "PBE0"},
             'parameter2' : {'type':DT.string, 'values':['param2-value1','param2-value2','param2-value3','param2-value4'], 'default_value': "param2-default"},
-            'charge':  {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
-            'maxiter' : {'type':DT.integer, 'min': None, 'max': None, 'default_value': 300},
-            'multip' : {'type':DT.integer,'min': None, 'max': None, 'default_value': 1},
-            'energy' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 5.0e-7},
-            'density' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 1e-6},
-            #'tolerances' : ['str','tight'],
-            'gradient' :  {'type':DT.decimal, 'min': None, 'max': None, 'default_value':1.0e-4}
+            'parameter4':  {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
+            'parameter5' : {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
+            'parameter6' : {'type':DT.integer,'min': None, 'max': None, 'default_value': 0},
+            'parameter7' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 0},
+            'parameter8' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 0},
+            'parameter9' :  {'type':DT.decimal, 'min': None, 'max': None, 'default_value':0}
         }
 
 

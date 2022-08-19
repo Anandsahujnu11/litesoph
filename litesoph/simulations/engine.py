@@ -163,3 +163,8 @@ class EngineNwchem(EngineStrategy):
 
     def __init__(self, project_dir, lsconfig, status=None) -> None:
         pass
+
+class Engine_dummyengine(EngineStrategy):
+
+    def __init__(self, project_dir, lsconfig, status=None) -> None:
+        pass

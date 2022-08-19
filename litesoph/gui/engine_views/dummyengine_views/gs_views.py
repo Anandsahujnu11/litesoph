@@ -45,21 +45,21 @@ class dummyengineGSPage(EngineViews):
         sub_task['state'] = 'readonly'
        
 
-        self.charge = tk.Label(mode_frame, text="Parameter3",bg=label_design['bg'], fg=label_design['fg'])
-        self.charge['font'] = label_design['font']
-        self.charge.grid(row=6, column=0, sticky='w', padx=2, pady=4)
+        self.parameter4 = tk.Label(mode_frame, text="Parameter3",bg=label_design['bg'], fg=label_design['fg'])
+        self.parameter4['font'] = label_design['font']
+        self.parameter4.grid(row=6, column=0, sticky='w', padx=2, pady=4)
 
-        self.entry_chrg = Onlydigits(mode_frame,textvariable=self._var['charge'])
+        self.entry_chrg = Onlydigits(mode_frame,textvariable=self._var['parameter4'])
         self.entry_chrg['font'] = label_design['font']
         self.entry_chrg.grid(row=6, column=1, sticky='w', padx=2, pady=2)
 
-        multiplicity_label = tk.Label(mode_frame, text='Parameter4',bg=label_design['bg'], fg=label_design['fg'])
-        multiplicity_label['font'] = label_design['font']
-        multiplicity_label.grid(row=7, column=0, sticky='w', padx=2, pady=4)
+        self.multiplicity_label = tk.Label(mode_frame, text='Parameter4',bg=label_design['bg'], fg=label_design['fg'])
+        self.multiplicity_label['font'] = label_design['font']
+        self.multiplicity_label.grid(row=7, column=0, sticky='w', padx=2, pady=4)
 
-        multiplicity_entry = Onlydigits(mode_frame,textvariable= self._var['multip'])
-        multiplicity_entry['font'] =label_design['font']
-        multiplicity_entry.grid(row=7, column=1, sticky='w', padx=2, pady=2)
+        self.multiplicity_entry = Onlydigits(mode_frame,textvariable= self._var['parameter6'])
+        self.multiplicity_entry['font'] =label_design['font']
+        self.multiplicity_entry.grid(row=7, column=1, sticky='w', padx=2, pady=2)
 
 
     def show_cal_tab(self, parent):
@@ -76,7 +76,7 @@ class dummyengineGSPage(EngineViews):
         self.nwxc['font'] = label_design['font']
         self.nwxc.grid(row=2, column=0, sticky='w', padx=2, pady=4)
 
-        self.entry_pol_x = ttk.Combobox(nw_frame, textvariable= self._var['xc'], value = self.default_para['xc']['values'])
+        self.entry_pol_x = ttk.Combobox(nw_frame, textvariable= self._var['parameter3'], value = self.default_para['parameter3']['values'])
         self.entry_pol_x['font'] = label_design['font']
         self.entry_pol_x['state'] = 'readonly'
         self.entry_pol_x.grid(row=2, column=1, sticky='w', padx=2, pady=2)
@@ -105,8 +105,8 @@ class dummyengineGSPage(EngineViews):
         self.label_pol_z['font'] = label_design['font']
         self.label_pol_z.grid(row=2, column=0, sticky='w', padx=2, pady=4)
 
-        #entry = ttk.Entry(self.Frame1,textvariable= self._var['maxiter'])
-        entry = Onlydigits(nwchem_conv,textvariable= self._var['maxiter'])
+        #entry = ttk.Entry(self.Frame1,textvariable= self._var['parameter5'])
+        entry = Onlydigits(nwchem_conv,textvariable= self._var['parameter5'])
         entry['font'] = label_design['font']
         entry.grid(row=2, column=1, sticky='w', padx=6, pady=2)
 
@@ -114,7 +114,7 @@ class dummyengineGSPage(EngineViews):
         self.Frame2_note['font'] = label_design['font']
         self.Frame2_note.grid(row=4, column=0, sticky='w', padx=2, pady=4)
 
-        self.entry_ener = tk.Entry(nwchem_conv, textvariable= self._var['energy'])
+        self.entry_ener = tk.Entry(nwchem_conv, textvariable= self._var['parameter7'])
         #self.entry_ener = Validatedconv(self.Frame1)
         self.entry_ener['font'] = label_design['font']
         self.entry_ener.grid(row=4, column=1, sticky='w', padx=2, pady=2)
@@ -124,7 +124,7 @@ class dummyengineGSPage(EngineViews):
         #self.label_proj.place(x=10,y=10)
         self.label_proj.grid(row=6, column=0, sticky='w', padx=2, pady=4)
 
-        self.entry_proj = tk.Entry(nwchem_conv,textvariable= self._var['density'])
+        self.entry_proj = tk.Entry(nwchem_conv,textvariable= self._var['parameter8'])
         self.entry_proj['font'] = label_design['font']
         self.entry_proj.delete(0,tk.END)
         self.entry_proj.insert(0,"1.0e-4")
@@ -136,7 +136,7 @@ class dummyengineGSPage(EngineViews):
         #self.label_proj.place(x=10,y=10)
         self.label_proj.grid(row=8, column=0, sticky='w', padx=2, pady=4)
 
-        self.entry_grd = tk.Entry(nwchem_conv,textvariable= self._var['gradient'])
+        self.entry_grd = tk.Entry(nwchem_conv,textvariable= self._var['parameter9'])
         self.entry_grd['font'] = label_design['font']
         self.entry_grd.delete(0,tk.END)
         self.entry_grd.insert(0,"1.0e-4")
@@ -150,14 +150,14 @@ class dummyengineGSPage(EngineViews):
 
     def get_parameters(self) -> dict:
         inp_dict_nw = {
-            'dft':{'xc': self._var['xc'].get(),
-                    'convergence':{'energy': self._var['energy'].get(),
-                                    'density' : self._var['density'].get(),
-                                    'gradient':self._var['gradient'].get()},
-                    'mult' : self._var['multip'].get(),
-                    'iterations' : self._var['maxiter'].get()},
+            'dft':{'parameter3': self._var['parameter3'].get(),
+                    'convergence':{'parameter7': self._var['parameter7'].get(),
+                                    'parameter8' : self._var['parameter8'].get(),
+                                    'parameter9':self._var['parameter9'].get()},
+                    'mult' : self._var['parameter6'].get(),
+                    'iterations' : self._var['parameter5'].get()},
             'parameter2': self._var['parameter2'].get(),
-            'charge' : self._var['charge'].get(),
+            'parameter4' : self._var['parameter4'].get(),
             'engine':'nwchem'
                     }     
         return inp_dict_nw

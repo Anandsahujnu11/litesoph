@@ -3,7 +3,7 @@ import pathlib
 import re
 import os
 
-from litesoph.simulations.engine import EngineStrategy,EngineGpaw,EngineNwchem,EngineOctopus
+from litesoph.simulations.engine import EngineStrategy,EngineGpaw,EngineNwchem,EngineOctopus,Engine_dummyengine
 from ..utilities.job_submit import SubmitNetwork
 
 GROUND_STATE = 'ground_state'
