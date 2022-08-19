@@ -107,7 +107,7 @@ class WorkManagerPage(ttk.Frame):
     Pre_task = ["Ground State"]
     Sim_task = ["Delta Kick","Gaussian Pulse"]
     Post_task = ["Compute Spectrum","Kohn Sham Decomposition","Population Correlation","Induced Density Analysis","Generalised Plasmonicity Index", "Plot"]
-    engine_list = ['auto-mode','gpaw', 'nwchem', 'octopus']
+    engine_list = ['auto-mode','gpaw', 'nwchem', 'octopus', 'dummyengine']
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent,*args, **kwargs)
