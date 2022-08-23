@@ -205,7 +205,7 @@ class OctTimedependentState(Task):
             'geometry' : "coordinate.xyz",       
             'dimension' : 3, 
             'theory':'DFT' ,          # "DFT", "INDEPENDENT_PARTICLES","HARTREE_FOCK","HARTREE","RDMFT"
-            'pseudo_potential':'set|standard', # else 'file|pseudo potential filename'
+            'pseudo_potential':'set|standard', # else 'file|filename'
             'mass' : 1.0,             # mass of species in atomic unit
             'box':{'shape':'minimum','radius':1.0,'xlength':0.0, 'sizex':0.0, 'sizey':0.0, 'sizez':0.0},
             'spacing': 0.0,           # spacing between points in the mesh

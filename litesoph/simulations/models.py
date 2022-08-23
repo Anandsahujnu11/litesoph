@@ -113,7 +113,7 @@ def get_engine_model(engine):
 class AutoModeModel:
     
     ground_state = {
-            'mode' : {'type':DT.string, 'values':['nao', 'fd', 'pw', 'gaussian'], 'default_value': '--choose mode--'},
+            'mode' : {'type':DT.string, 'values':['nao', 'fd', 'pw', 'gaussian','dummyengine_mode'], 'default_value': '--choose mode--'},
             'shape' : {'type':DT.string, 'values':["parallelepiped","minimum", "sphere", "cylinder"], 'default_value':"--choose box--"},
             'basis' : {'type':DT.string, 'values':[], 'default_value': ''},
             'charge':  {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
@@ -208,9 +208,9 @@ class OctopusModel:
 class dummyengineModel:
     
      ground_state = {
-            'parameter1' : {'type':DT.string, 'values':['param1-value1','param1-value2','param1-value3','param1-value4'], 'default_value': 'param1-default'},
-            'parameter3' : {'type':DT.string, 'values':['param3-value1','param3-value2','param3-value3','param3-value4'], 'default_value': "PBE0"},
-            'parameter2' : {'type':DT.string, 'values':['param2-value1','param2-value2','param2-value3','param2-value4'], 'default_value': "param2-default"},
+            'mode' : {'type':DT.string, 'values':['dummyengine_mode'], 'default_value': 'dummyengine_mode'},
+            'parameter3' : {'type':DT.string, 'values':['param3-value1','param3-value2','param3-value3','param3-value4'], 'default_value': "param2-default"},
+            'parameter2' : {'type':DT.string, 'values':['param2-value1','param2-value2','param2-value3','param2-value4'], 'default_value': "param3-default"},
             'parameter4':  {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
             'parameter5' : {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
             'parameter6' : {'type':DT.integer,'min': None, 'max': None, 'default_value': 0},

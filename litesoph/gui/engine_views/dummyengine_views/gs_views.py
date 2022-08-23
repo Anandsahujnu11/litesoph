@@ -26,11 +26,11 @@ class dummyengineGSPage(EngineViews):
         self.heading['font'] = myfont15()
         self.heading.grid(row=0, column=0, pady=5)
                 
-        self.label_proj = tk.Label(mode_frame,text="Parameter1",bg=label_design['bg'], fg=label_design['fg'])
+        self.label_proj = tk.Label(mode_frame,text="mode",bg=label_design['bg'], fg=label_design['fg'])
         self.label_proj['font'] = label_design['font']
         self.label_proj.grid(row=2, column=0, sticky='w', padx=2, pady=4)
 
-        task = ttk.Combobox(mode_frame, textvariable = self._var['parameter1'], values= self.default_para['parameter1']['values'])
+        task = ttk.Combobox(mode_frame, textvariable = self._var['mode'], values= self.default_para['mode']['values'])
         task['font'] = label_design['font']
         task.grid(row=2, column= 1, sticky='w', padx=2, pady=2)
         task['state'] = 'readonly'

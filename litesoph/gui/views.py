@@ -527,6 +527,10 @@ class GroundStatePage(View):
                 self.engine.set('gpaw')
             elif task.get() == "gaussian":
                 self.engine.set('nwchem')
+
+            elif task.get() == "dummyengine_mode":
+                self.engine.set('dummyengine')
+
             elif task.get() == "fd":
                 for widget in self.calculation_frame.winfo_children():
                     widget.destroy()
