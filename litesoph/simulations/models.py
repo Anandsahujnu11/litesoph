@@ -103,6 +103,9 @@ def get_engine_model(engine):
         return NWchemModel
     elif engine == 'octopus':
         return OctopusModel
+    elif engine == 'orca':
+        return ORCAModel
+
 
 @dataclass
 class AutoModeModel:
@@ -196,6 +199,22 @@ class OctopusModel:
             'rel_density' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 0},
             'rel_eigen' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 0},
             'extra_states' : {'type':DT.integer,'min': None, 'max': None, 'default_value': 0}
+        }
+
+@dataclass
+class ORCAModel:
+    
+    ground_state = {
+            'mode' : {'type':DT.string, 'values':['gaussian'], 'default_value': 'gaussian'},
+            'xc' : {'type':DT.string, 'values':["PBE96","PBE0","B3LYP","PW91", "BP86", "BP91","BHLYP","M05","M05-2X","M06-HF","M08-SO","M011","CAM-B3LYP","LC-BLYP","LC-PBE","LC-wPBE","HSE03","HSE06"], 'default_value': "PBE0"},
+            'basis' : {'type':DT.string, 'values':["6-31G","STO-2G","STO-3G","STO-6G","3-21G","3-21G*","6-31G*","6-31G**","6-311G","6-311G*","6-311G**","cc-pVDZ","aug-cc-pvtz"], 'default_value': "6-31G"},
+            'charge':  {'type':DT.integer, 'min': None, 'max': None, 'default_value': 0},
+            'maxiter' : {'type':DT.integer, 'min': None, 'max': None, 'default_value': 300},
+            'multip' : {'type':DT.integer,'min': None, 'max': None, 'default_value': 1},
+            'energy' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 5.0e-7},
+            'density' : {'type':DT.decimal, 'min': None, 'max': None, 'default_value': 1e-6},
+            #'tolerances' : ['str','tight'],
+            'gradient' :  {'type':DT.decimal, 'min': None, 'max': None, 'default_value':1.0e-4}
         }
     
 

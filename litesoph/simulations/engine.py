@@ -8,6 +8,8 @@ from litesoph.lsio.IO import write2file
 from litesoph.simulations.gpaw import gpaw_data
 from litesoph.simulations.nwchem import nwchem_data
 from litesoph.simulations.octopus import octopus_data 
+from litesoph.simulations.orca import orca_data 
+
 from litesoph import config
 
 class EngineStrategy(ABC):
@@ -159,6 +161,11 @@ class EngineOctopus(EngineStrategy):
 
         
 class EngineNwchem(EngineStrategy):
+
+    def __init__(self, project_dir, lsconfig, status=None) -> None:
+        pass
+
+class EngineORCA(EngineStrategy):
 
     def __init__(self, project_dir, lsconfig, status=None) -> None:
         pass
