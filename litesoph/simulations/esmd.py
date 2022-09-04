@@ -3,7 +3,7 @@ import pathlib
 import re
 import os
 
-from litesoph.simulations.engine import EngineStrategy,EngineGpaw,EngineNwchem,EngineOctopus
+from litesoph.simulations.engine import EngineStrategy,EngineGpaw,EngineNwchem,EngineOctopus, EngineORCA
 from ..utilities.job_submit import SubmitNetwork
 
 GROUND_STATE = 'ground_state'
@@ -22,6 +22,9 @@ def get_engine_obj(engine, *args, **kwargs)-> EngineStrategy:
         return  EngineOctopus(*args, **kwargs)
     elif engine == 'nwchem':
         return EngineNwchem(*args, **kwargs)
+    elif engine == 'orca':
+        return EngineORCA(*args, **kwargs)
+
 
 class TaskError(RuntimeError):
     """Base class of error types related to any TASK."""
