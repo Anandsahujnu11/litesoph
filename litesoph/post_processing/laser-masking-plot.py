@@ -47,7 +47,7 @@ def extract_dipolemoment_data(source_data,dm_total_file,dm_masked_file,dm_unmask
           t = round(t*units.au_to_fs,7)
           # Write the x, y, and z components of the induced dipole moments 
           # of the masked and the unmasked regions in separate files  
-          #
+          
             
           #total dm region
           dm_total.write(str(t)+ "  " + str(dm_x_t0) + "  " + str(dm_y_t0)+ "  " + str(dm_z_t0))
@@ -58,10 +58,10 @@ def extract_dipolemoment_data(source_data,dm_total_file,dm_masked_file,dm_unmask
     dm_total.close()
     dm_unmasked.close()
     dm_masked.close()
+    dm.close()
     
   
 
-# read_dat_file("dmpulse.dat")
 
 def plot_graph(data, imgfile:str,row:int, column:int, TITLE:str,XLABEL,YLABEL,xlimit=(0.0, 100.0)):
 
@@ -86,18 +86,10 @@ def plot_graph(data, imgfile:str,row:int, column:int, TITLE:str,XLABEL,YLABEL,xl
     plt.yticks(fontsize=14, weight = 'bold')
     
     plt.xlim(xlimit[0], xlimit[1])
-
-
-    plt.grid()
-    
-    # plotting of graph
+    plt.grid() 
+       
     plt.plot(X, Y,'k')
     plt.savefig(imgfile)
-
-
     plt.show()
 
 
-# plot_graph("dm_masked.dat",'image.png',0,1,'Title', 'x-label','y-label',xlimit=(0.0, 100.0))
-
-# plot_graph("dm_masked.dat",'image.png',0,2,'Title of graph', 'x-label','y-label',xlimit=(0.0, 100.0))
