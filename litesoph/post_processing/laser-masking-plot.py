@@ -45,14 +45,18 @@ def fit_sin(time, envelope):
     return time_period_for_envelope
 
 
-def Energy_coupling_constant(datafilename, directionaxis:int, timeperiodmethod:str, timeaxis=0):
+def Energy_coupling_constant(datafilename, envelope_outfile, directionaxis:int, timeperiodmethod:str,timeaxis=0):
     
     dat=np.loadtxt(datafilename)  
     t=dat[:,timeaxis]  
     signal=dat[:,directionaxis]  
 
     analytic_signal = hilbert(signal)
-    amplitude_envelope = np.abs(analytic_signal)    
+    amplitude_envelope = np.abs(analytic_signal)  
+    envelope=np.stack((t, signal), axis=-1) 
+    np.savetxt(f"{str(envelope_outfile)}.dat", envelope)
+
+
     timeperiod = timeperiodmethod(t, amplitude_envelope)
     
     sec_to_fs= 10**(-15)
@@ -62,27 +66,31 @@ def Energy_coupling_constant(datafilename, directionaxis:int, timeperiodmethod:s
     return coupling_constant_in_eV
 
 
-def envelope_plot(dm_data,imgfile:str,time_column,dm_column:int,TITLE, XLABEL,YLABEL):
+def envelope_plot(dm_data,env_data,imgfile:str,dm_column:int,title, x_label,y_label,env_column=1,time_column=0):
     
-    dm_dat=np.loadtxt(dm_data)  
+    dm_dat=np.loadtxt(dm_data)
+    env_dat=np.loadtxt(env_data)
+
+
     t=dm_dat[:,time_column]  
-    signal=dm_dat[:,dm_column]
+    dm_signal=dm_dat[:,dm_column]
+    amplitude_envelope=env_dat[:,env_column]
+
     
-    analytic_signal = hilbert(signal)
-    amplitude_envelope = np.abs(analytic_signal)
      
     plt.rcParams["figure.figsize"] = (10,8)
-    plt.title(TITLE, fontsize = 25)
-    plt.xlabel(XLABEL, fontsize=15, weight = 'bold')
-    plt.ylabel(YLABEL, fontsize=15, weight = 'bold')
+    plt.title(title, fontsize = 25)
+    plt.xlabel(x_label, fontsize=15, weight = 'bold')
+    plt.ylabel(y_label, fontsize=15, weight = 'bold')
         
     plt.xticks(fontsize=14,  weight = 'bold')
     plt.yticks(fontsize=14, weight = 'bold')
     
     plt.grid() 
 
-    plt.plot(t, signal)
+    plt.plot(t, dm_signal)
     plt.plot(t, amplitude_envelope)
 
     plt.savefig(imgfile)
     plt.show()
+    
