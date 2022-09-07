@@ -86,16 +86,3 @@ def envelope_plot(dm_data,imgfile:str,time_column,dm_column:int,TITLE, XLABEL,YL
 
     plt.savefig(imgfile)
     plt.show()
-
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
