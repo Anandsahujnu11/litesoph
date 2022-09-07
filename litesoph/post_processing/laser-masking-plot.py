@@ -1,83 +1,77 @@
 from litesoph.utilities import units
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import hilbert
+from scipy.constants import e,h
+from math import pi
+import numpy, scipy.optimize
 
-def extract_dipolemoment_data(source_data,dm_total_file,dm_masked_file,dm_unmasked_file):
+
+
+def extract_dipolemoment_data(source_data,dm_total_file:str,dm_masked_file:str,dm_unmasked_file:str):
     
+    data = np.loadtxt(source_data,comments="#")
+
+    data[:,0] *= units.au_to_fs
+    dm_total = data[:,[0,2,3,4]]
+    dm_masked = data[:,[0,5,6,7]]
+    dm_unmasked=dm_total-dm_masked
     
-    dm=open(source_data, "r")
+    np.savetxt(f"{str(dm_total_file)}.dat", dm_total)
+    np.savetxt(f"{str(dm_masked_file)}.dat", dm_masked)
+    np.savetxt(f"{str(dm_unmasked_file)}.dat", dm_unmasked)
+
+
+def fit_sin(time, envelope):
+
+    '''Fit sin to the input time sequence, and return  "period" '''
+    time = numpy.array(time)
+    envelope = numpy.array(envelope)
+    ff = numpy.fft.fftfreq(len(time), (time[1]-time[0]))   
+    Fyy = abs(numpy.fft.fft(envelope))
+    guess_freq = abs(ff[numpy.argmax(Fyy[1:])+1])  
+    guess_amp = numpy.std(envelope) * 2.**0.5
+    guess_offset = numpy.mean(envelope)
+    guess = numpy.array([guess_amp, 2.*numpy.pi*guess_freq, 0., guess_offset])
+
+    def sinfunc(t, A, w, p, c):  return A * numpy.sin(w*t + p) + c
+    popt, pcov = scipy.optimize.curve_fit(sinfunc, time, envelope, p0=guess)
+    A, w, p, c = popt
+    f = w/(2.*numpy.pi)
+    time_period= 1./f
+    time_period_for_envelope= 2*time_period
+    fitfunc = lambda t: A * numpy.sin(w*t + p) + c
     
-    # Create output files
-    dm_total = open(dm_total_file,"w")
-    dm_masked = open(dm_masked_file,"w")
-    dm_unmasked = open(dm_unmasked_file,"w")
-          
-    lines = dm.readlines()
+    return time_period_for_envelope
 
-    f1=lines[3].strip().split()
 
-    # Total dipole moment at time t=0 fs.
-    dm_x_t0=float(f1[2])
-    dm_y_t0=float(f1[3])
-    dm_z_t0=float(f1[4])
-
-    # The dipole moment of the unmasked region at time t=0 fs.
-    dm_um_x_t0=float(f1[5])
-    dm_um_y_t0=float(f1[6])
-    dm_um_z_t0=float(f1[7])
-
-    # The dipole moment of the masked region at time t=0 fs.
-    dm_m_x_t0=dm_x_t0-dm_um_x_t0
-    dm_m_y_t0=dm_y_t0-dm_um_y_t0
-    dm_m_z_t0=dm_z_t0-dm_um_z_t0
-
-    for line in lines[2:]:
-          f = line.strip().split()
-          # time and dipole moments
-          t = float(f[0])
-          norm = float(f[1])
-          # total dipole moment
-          dm_x = float(f[2])
-          dm_y = float(f[3])
-          dm_z = float(f[4])
-          # dipole moment of the unmasked region
-          dm_um_x = float(f[5])
-          dm_um_y = float(f[6])
-          dm_um_z = float(f[7])
-
-          # convert time from atomic units to femtoseconds
-          t = round(t*units.au_to_fs,7)
-          # Write the x, y, and z components of the induced dipole moments 
-          # of the masked and the unmasked regions in separate files  
-          
-            
-          #total dm region
-          dm_total.write(str(t)+ "  " + str(dm_x_t0) + "  " + str(dm_y_t0)+ "  " + str(dm_z_t0))
-          dm_unmasked.write(str(t)+ "  " + str(dm_um_x-dm_um_x_t0) + "  " + str(dm_um_y-dm_um_y_t0)+ "  " + str(dm_um_z-dm_um_z_t0))
-          dm_masked.write(str(t)+ "  " + str(dm_x-dm_um_x-dm_m_x_t0) + "  " + str(dm_y-dm_um_y-dm_m_y_t0)+ "  " + str(dm_z-dm_um_z-dm_m_z_t0))
-          dm_masked.write("\n")
-          
-    dm_total.close()
-    dm_unmasked.close()
-    dm_masked.close()
-    dm.close()
+def Energy_coupling_constant(datafilename, directionaxis:int, timeperiodmethod:str, timeaxis=0):
     
-  
+    dat=np.loadtxt(datafilename)  
+    t=dat[:,timeaxis]  
+    signal=dat[:,directionaxis]  
 
-
-def plot_graph(data, imgfile:str,row:int, column:int, TITLE:str,XLABEL,YLABEL,xlimit=(0.0, 100.0)):
-
-    """general function for plotting graph using data file"""
-    import numpy as np
-    import matplotlib.pyplot as plt
+    analytic_signal = hilbert(signal)
+    amplitude_envelope = np.abs(analytic_signal)    
+    timeperiod = timeperiodmethod(t, amplitude_envelope)
     
+    sec_to_fs= 10**(-15)
 
-    #loading data and separating x & y axes
-    dat=np.loadtxt(data)  
-    X=dat[:,row]  
-    Y=dat[:,column]  
+    coupling_constant_in_eV= h/(timeperiod*sec_to_fs*e)
+
+    return coupling_constant_in_eV
+
+
+def envelope_plot(dm_data,imgfile:str,time_column,dm_column:int,TITLE, XLABEL,YLABEL):
     
-    #properties of graph
+    dm_dat=np.loadtxt(dm_data)  
+    t=dm_dat[:,time_column]  
+    signal=dm_dat[:,dm_column]
+    
+    analytic_signal = hilbert(signal)
+    amplitude_envelope = np.abs(analytic_signal)
+     
     plt.rcParams["figure.figsize"] = (10,8)
-
     plt.title(TITLE, fontsize = 25)
     plt.xlabel(XLABEL, fontsize=15, weight = 'bold')
     plt.ylabel(YLABEL, fontsize=15, weight = 'bold')
@@ -85,11 +79,23 @@ def plot_graph(data, imgfile:str,row:int, column:int, TITLE:str,XLABEL,YLABEL,xl
     plt.xticks(fontsize=14,  weight = 'bold')
     plt.yticks(fontsize=14, weight = 'bold')
     
-    plt.xlim(xlimit[0], xlimit[1])
     plt.grid() 
-       
-    plt.plot(X, Y,'k')
+
+    plt.plot(t, signal)
+    plt.plot(t, amplitude_envelope)
+
     plt.savefig(imgfile)
     plt.show()
 
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
