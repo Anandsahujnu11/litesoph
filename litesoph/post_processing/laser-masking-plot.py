@@ -7,7 +7,6 @@ from math import pi
 import numpy, scipy.optimize
 
 
-
 def extract_dipolemoment_data(source_data,dm_total_file:str,dm_masked_file:str,dm_unmasked_file:str):
     
     data = np.loadtxt(source_data,comments="#")
@@ -22,7 +21,7 @@ def extract_dipolemoment_data(source_data,dm_total_file:str,dm_masked_file:str,d
     np.savetxt(f"{str(dm_unmasked_file)}.dat", dm_unmasked)
 
 
-def fit_sin(time, envelope):
+def fit_sin_for_envelope(time, envelope):
 
     '''Fit sin to the input time sequence, and return  "period" '''
     time = numpy.array(time)
@@ -44,8 +43,7 @@ def fit_sin(time, envelope):
     
     return time_period_for_envelope
 
-
-def Energy_coupling_constant(datafilename, envelope_outfile, directionaxis:int, timeperiodmethod:str,timeaxis=0):
+def generate_envelope(datafilename, envelope_outfile, directionaxis:int, timeaxis=0):
     
     dat=np.loadtxt(datafilename)  
     t=dat[:,timeaxis]  
@@ -53,31 +51,27 @@ def Energy_coupling_constant(datafilename, envelope_outfile, directionaxis:int, 
 
     analytic_signal = hilbert(signal)
     amplitude_envelope = np.abs(analytic_signal)  
-    envelope=np.stack((t, signal), axis=-1) 
-    np.savetxt(f"{str(envelope_outfile)}.dat", envelope)
+    envelope_data=np.stack((t, amplitude_envelope), axis=-1) 
+    np.savetxt(f"{str(envelope_outfile)}.dat", envelope_data)
 
 
-    timeperiod = timeperiodmethod(t, amplitude_envelope)
-    
+def Energy_coupling_constant(timeperiodmethod, args,kwargs):
+
+    timeperiod_in_sec= timeperiodmethod(args,kwargs)
     sec_to_fs= 10**(-15)
-
-    coupling_constant_in_eV= h/(timeperiod*sec_to_fs*e)
-
+    coupling_constant_in_eV= h/(timeperiod_in_sec*sec_to_fs*e)
     return coupling_constant_in_eV
-
+    
 
 def envelope_plot(dm_data,env_data,imgfile:str,dm_column:int,title, x_label,y_label,env_column=1,time_column=0):
     
     dm_dat=np.loadtxt(dm_data)
     env_dat=np.loadtxt(env_data)
 
-
     t=dm_dat[:,time_column]  
     dm_signal=dm_dat[:,dm_column]
     amplitude_envelope=env_dat[:,env_column]
-
-    
-     
+         
     plt.rcParams["figure.figsize"] = (10,8)
     plt.title(title, fontsize = 25)
     plt.xlabel(x_label, fontsize=15, weight = 'bold')
@@ -88,8 +82,9 @@ def envelope_plot(dm_data,env_data,imgfile:str,dm_column:int,title, x_label,y_la
     
     plt.grid() 
 
-    plt.plot(t, dm_signal)
-    plt.plot(t, amplitude_envelope)
+    plt.plot(t, dm_signal,label='dipole moment')
+    plt.plot(t, amplitude_envelope,label='envelope')
+    plt.legend(loc ="upper right")
 
     plt.savefig(imgfile)
     plt.show()
