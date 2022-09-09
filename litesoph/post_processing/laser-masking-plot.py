@@ -5,6 +5,7 @@ from scipy.signal import hilbert
 from scipy.constants import e,h
 from math import pi
 import numpy, scipy.optimize
+from fourier import Fourier 
 
 
 def extract_dipolemoment_data(source_data,dm_total_file:str,dm_masked_file:str,dm_unmasked_file:str):
@@ -43,19 +44,45 @@ def fit_sin_for_envelope(time, envelope):
     
     return time_period_for_envelope
 
-def generate_envelope(datafilename, envelope_outfile, directionaxis:int, timeaxis=0):
-    
-    dat=np.loadtxt(datafilename)  
-    t=dat[:,timeaxis]  
-    signal=dat[:,directionaxis]  
+def time_period_fourier(*args, **kwargs):
 
-    analytic_signal = hilbert(signal)
-    amplitude_envelope = np.abs(analytic_signal)  
-    envelope_data=np.stack((t, amplitude_envelope), axis=-1) 
+    import fourier as fr
+
+    
+
+    pass 
+
+
+# def generate_envelope(datafilename, envelope_outfile, directionaxis:int, timeaxis=0):
+    
+#     dat=np.loadtxt(datafilename)  
+#     t=dat[:,timeaxis]  
+#     signal=dat[:,directionaxis]  
+
+#     analytic_signal = hilbert(signal)
+#     amplitude_envelope = np.abs(analytic_signal)  
+#     envelope_data=np.stack((t, amplitude_envelope), axis=-1) 
+#     np.savetxt(f"{str(envelope_outfile)}.dat", envelope_data)
+
+def generate_envelope(datafilename, twin, wframe:int, envelope_outfile:str, directionaxis:int, timeaxis=0):
+    """ function to generate envelope data"""
+    
+    dat=np.loadtxt(datafilename) 
+    nt=len(dat) 
+
+    time = dat[:,timeaxis] 
+    fn = dat[:,directionaxis] 
+    delt = time[1]-time[0]
+
+    fou=Fourier(nt,delt,twin)
+    env  = fou.envelope(fn[:])
+    amplitude_envelope=env[0]
+
+    envelope_data=np.stack((time, amplitude_envelope), axis=-1) 
     np.savetxt(f"{str(envelope_outfile)}.dat", envelope_data)
 
 
-def Energy_coupling_constant(timeperiodmethod, args,kwargs):
+def Energy_coupling_constant(timeperiodmethod, *args,**kwargs):
 
     timeperiod_in_sec= timeperiodmethod(args,kwargs)
     sec_to_fs= 10**(-15)
