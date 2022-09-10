@@ -48,21 +48,9 @@ def time_period_fourier(*args, **kwargs):
 
     import fourier as fr
 
-    
-
     pass 
 
 
-# def generate_envelope(datafilename, envelope_outfile, directionaxis:int, timeaxis=0):
-    
-#     dat=np.loadtxt(datafilename)  
-#     t=dat[:,timeaxis]  
-#     signal=dat[:,directionaxis]  
-
-#     analytic_signal = hilbert(signal)
-#     amplitude_envelope = np.abs(analytic_signal)  
-#     envelope_data=np.stack((t, amplitude_envelope), axis=-1) 
-#     np.savetxt(f"{str(envelope_outfile)}.dat", envelope_data)
 
 def generate_envelope(datafilename, twin, wframe:int, envelope_outfile:str, directionaxis:int, timeaxis=0):
     """ function to generate envelope data"""
@@ -80,6 +68,25 @@ def generate_envelope(datafilename, twin, wframe:int, envelope_outfile:str, dire
 
     envelope_data=np.stack((time, amplitude_envelope), axis=-1) 
     np.savetxt(f"{str(envelope_outfile)}.dat", envelope_data)
+
+def freq_fourier(envelope_filename, twin, wframe:int, fourier_outfile:str, directionaxis:int, timeaxis=0):
+    """ function to generate envelope data"""
+    
+    dat=np.loadtxt(envelope_filename) 
+    nt=len(dat) 
+
+    time = dat[:,timeaxis] 
+    fn = dat[:,directionaxis] 
+    delt = time[1]-time[0]
+
+    fou=Fourier(nt,delt,twin)
+    f_trans  = fou.transform(fn[:])
+    freq =(f_trans[0])
+    fw   =(f_trans[1])
+    
+    f_trans_data=np.stack((freq, fw), axis=-1) 
+    np.savetxt(f"{str(fourier_outfile)}.dat", f_trans_data)
+
 
 
 def Energy_coupling_constant(timeperiodmethod, *args,**kwargs):
