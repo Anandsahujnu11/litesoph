@@ -71,7 +71,8 @@ def generate_envelope(datafilename, twin, wframe:int, envelope_outfile:str, dire
 
 def freq_fourier(envelope_filename, twin, wframe:int, fourier_outfile:str, directionaxis:int, timeaxis=0):
     """ function to generate envelope data"""
-    
+    from scipy.signal import find_peaks
+
     dat=np.loadtxt(envelope_filename) 
     nt=len(dat) 
 
@@ -85,7 +86,30 @@ def freq_fourier(envelope_filename, twin, wframe:int, fourier_outfile:str, direc
     fw   =(f_trans[1])
     
     f_trans_data=np.stack((freq, fw), axis=-1) 
-    np.savetxt(f"{str(fourier_outfile)}.dat", f_trans_data)
+    # np.savetxt(f"{str(fourier_outfile)}.dat", f_trans_data)
+
+    peaks_index, properties = find_peaks(np.abs(fw), height=5)
+
+    print('Positions and magnitude of frequency peaks:')
+    [print("%4.4f    \t %3.4f" %(freq[peaks_index[i]], properties['peak_heights'][i])) for i in range(len(peaks_index))]
+
+    plt.plot(freq, np.abs(fw.real),'-', freq[peaks_index],properties['peak_heights'],'x')
+    plt.xlabel("Frequency")
+    plt.ylabel("Amplitude")
+    plt.show()
+    # return properties
+
+
+env_data='/home/anand/Documents/myprojects/litesoph-testing-myworks/laser-masking/envelope.dat'
+
+prop_fr=freq_fourier(env_data, 210, 10500, 'fourier_outfile',1)
+print('properties of fourier transform :', prop_fr )
+
+
+
+
+
+
 
 
 
