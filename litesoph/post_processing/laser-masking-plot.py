@@ -55,7 +55,7 @@ def time_period_fourier(*args, **kwargs):
 def generate_envelope(datafilename, twin, wframe:int, envelope_outfile:str, directionaxis:int, timeaxis=0):
     """ function to generate envelope data"""
     
-    dat=np.loadtxt(datafilename) 
+    dat=np.loadtxt(datafilename,comments="#") 
     nt=len(dat) 
 
     time = dat[:,timeaxis] 
@@ -73,7 +73,7 @@ def freq_fourier(envelope_filename, twin, wframe:int, fourier_outfile:str, direc
     """ function to generate envelope data"""
     from scipy.signal import find_peaks
 
-    dat=np.loadtxt(envelope_filename) 
+    dat=np.loadtxt(envelope_filename,comments="#") 
     nt=len(dat) 
 
     time = dat[:,timeaxis] 
@@ -86,7 +86,7 @@ def freq_fourier(envelope_filename, twin, wframe:int, fourier_outfile:str, direc
     fw   =(f_trans[1])
     
     f_trans_data=np.stack((freq, fw), axis=-1) 
-    # np.savetxt(f"{str(fourier_outfile)}.dat", f_trans_data)
+    np.savetxt(f"{str(fourier_outfile)}.dat", f_trans_data)
 
     peaks_index, properties = find_peaks(np.abs(fw), height=5)
 
@@ -100,10 +100,13 @@ def freq_fourier(envelope_filename, twin, wframe:int, fourier_outfile:str, direc
     # return properties
 
 
-env_data='/home/anand/Documents/myprojects/litesoph-testing-myworks/laser-masking/envelope.dat'
+# env_data='/home/anand/Documents/myprojects/litesoph-testing-myworks/laser-masking/envelope.dat'
+# data1='/home/anand/Downloads/dmpulse_Gauss_Delta_laser.dat'
+# data2='/home/anand/Downloads/dm.dat'
 
-prop_fr=freq_fourier(env_data, 210, 10500, 'fourier_outfile',1)
-print('properties of fourier transform :', prop_fr )
+
+# prop_fr=freq_fourier(data1, 100, len(data1), 'fourier_outfile',2)
+# print('properties of fourier transform :', prop_fr )
 
 
 
