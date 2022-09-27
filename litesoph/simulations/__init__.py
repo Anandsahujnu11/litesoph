@@ -50,6 +50,10 @@ class TaskManager:
         self.current_task = None
         self.current_project = None
         self.current_project_status = None
+        self.job_list = []
+        self.current_jobtask = None
+        self.current_job = None
+        self.current_job_status = None
         self.task_objects = []
         self.read_lsconfig()
         vis_tools = self.lsconfig.get('visualization_tools', None)
@@ -81,6 +85,14 @@ class TaskManager:
         except:
             raise
         self.init_project(project_path, new_project=True)
+
+    def create_new_job(self, job_path: Path):
+        
+        try:
+            self.create_dir(job_path)
+        except:
+            raise
+        self.init_job(job_path, new_job=True)
     
     def open_existing_project(self, project_path: Path):
 
@@ -102,6 +114,23 @@ class TaskManager:
         self.current_task_list = p_data['tasks']
         self.project_list.append(self.current_project_data)
         self._change_directory(self.current_project)
+    
+    def init_job(self, job_path, new_job=False):
+        
+        self.current_job_data = j_data = {}
+        self.current_job = job_path
+        if new_job:
+            j_data['name'] = job_path.name
+            j_data['path'] = str(self.current_job)
+            j_data['tasks'] = []
+        try:
+            self.current_job_status = Status(self.current_job, j_data)
+        except Exception:
+            j_data = {}
+            raise
+        self.current_task_list = j_data['tasks']
+        self.job_list.append(self.current_job_data)
+        self._change_directory(self.current_job)
 
     def get_perivous_engine(self)-> list:
         non_engine_keys = ['name', 'path', 'tasks', 'geometry']

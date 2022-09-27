@@ -136,6 +136,8 @@ class WorkManagerPage(ttk.Frame):
         self._default_var = {
             'proj_path' : ['str'],
             'proj_name' : ['str'],
+            'job_path' : ['str'],
+            'job_name' : ['str'],
             'task' : ['str', '--choose job task--'],
             'sub_task' : ['str'],
             'dynamics': ['str','--dynamics type--'],
@@ -2094,3 +2096,42 @@ class CreateProjectPage(Toplevel):
         return self._var[key].get()
 
     
+####### NEW JOB filemenu #########
+
+class CreateJOBPage(Toplevel):
+
+    def __init__(self, parent, *args, **kwargs):
+        super().__init__(parent, *args, **kwargs)
+
+        self._default_var = {
+              'job_path' : ['str'],
+              'job_name' : ['str'],
+              
+          }
+
+        self._var = var_define(self._default_var)
+        self.attributes("-topmost", True)
+        self.grab_set()
+        self.lift()
+        self.title("Create New Job")     
+        self.geometry("550x200")
+
+        self.label_proj = Label(self,text="JOB Name",bg=label_design['bg'],fg=label_design['fg'])
+        self.label_proj['font'] = label_design['font']
+        self.label_proj.grid(column=0, row= 3, sticky=tk.W,  pady=10, padx=10)  
+
+        self.entry_proj = Entry(self,textvariable=self._var['job_name'])
+        self.entry_proj['font'] = myfont()
+        self.entry_proj.grid(column=1, row= 3, sticky=tk.W)
+        self.entry_proj.delete(0, tk.END)
+
+        self.button_project = Button(self,text="Create JOB Project",width=18, activebackground="#78d6ff",command= lambda :self.event_generate('<<CreateNewJob>>'))
+        self.button_project['font'] = myfont()
+        self.button_project.grid(column=2, row= 3, sticky=tk.W, padx= 10, pady=10)  
+
+        # self.label_job=Label(self, text='Enter label',bg=label_design['bg'],font=myfont(), fg=label_design['fg']).grid(column=0, row= 3, sticky=tk.W,  pady=10, padx=10)
+        # self.entry_job=Entry(self, textvariable=self._var['job_name'], width=18,font=myfont()).grid(column=1, row= 3, sticky=tk.W)
+        # self.button_job =Button(self, text="Create New Job",font=myfont(), command=self.event_generate('<<CreateNewJob>>'),width=18, activebackground="#78d6ff").grid(column=2, row= 3, sticky=tk.W, padx= 10, pady=10)
+            
+    def get_value(self, key):
+        return self._var[key].get()

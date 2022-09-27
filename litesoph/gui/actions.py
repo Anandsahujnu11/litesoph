@@ -16,8 +16,10 @@ SHOW_MASKING_PAGE = SHOW_PAGE_EVENT.format(MASKING)
 GET_MOLECULE = '<<GetMolecule>>'
 VISUALIZE_MOLECULE = '<<VisualizeMolecule>>'
 CREATE_NEW_PROJECT = '<<CreateNewProject>>' 
-CREATE_PROJECT_WINDOW = '<<create_filemenu_project>>'
+CREATE_NEW_JOB = '<<CreateNewJob>>' 
 
+CREATE_PROJECT_WINDOW = '<<create_filemenu_project>>'
+CREATE_JOB_WINDOW = '<<create_jobfilemenu_project>>'
 OPEN_PROJECT = '<<OpenExistingProject>>'
 ON_PROCEED = '<<SelectProceed>>' 
 ON_BACK_BUTTON = '<<ClickBackButton>>'

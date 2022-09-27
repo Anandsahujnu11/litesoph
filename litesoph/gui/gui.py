@@ -134,6 +134,8 @@ class GUIAPP:
             actions.VISUALIZE_MOLECULE: self._on_visualize,
             actions.CREATE_NEW_PROJECT: self._on_create_project,
             actions.CREATE_PROJECT_WINDOW:self.create_project_window,
+            actions.CREATE_NEW_JOB: self._on_create_job,
+            actions.CREATE_JOB_WINDOW:self.create_job_window,
             actions.OPEN_PROJECT : self._on_open_project,
             actions.ON_PROCEED : self._on_proceed,
             actions.ON_BACK_BUTTON : self._on_back_button,
@@ -196,6 +198,9 @@ class GUIAPP:
         
     def create_project_window(self, *_):
         self.project_window = v.CreateProjectPage(self.main_window)   
+
+    def create_job_window(self, *_):
+        self.job_window = v.CreateJOBPage(self.main_window)  
         
     def _on_create_project(self, *_):
         """Creates a new litesoph project"""
@@ -230,7 +235,42 @@ class GUIAPP:
             if hasattr(self, 'project_window'):
                 self.project_window.destroy()
 
-            
+    def _on_create_job(self, *_):
+        """Creates a new litesoph job"""
+        if hasattr(self, 'job_window'):
+            job_name = self.job_window.get_value('job_name')
+        else:
+            job_name = self._frames[v.WorkManagerPage].get_value('job_name')
+        
+        if not job_name:
+            messagebox.showerror(title='Error', message='Please set the job name.')
+            return
+        # job_window = v.StartPage(self.main_window) 
+        # project_name = StringVar(self.job_window, "Enter label", 'new_name')
+        # job_path = StringVar(self.job_window, name='currentPath', value=pathlib.Path.cwd())
+
+        job_path = filedialog.askdirectory(title= "Select the directory to create Litesoph Job")
+        
+        if not job_path:
+            return
+
+        job_path = pathlib.Path(job_path) / job_name
+        
+        try:
+            self.task_manager.create_new_job(job_path)
+        except PermissionError as e:
+            messagebox.showerror(title='Error', message = 'Premission denied', detail = e)
+        except FileExistsError as e:
+            messagebox.showerror(title='Error', message = 'Job already exists', detail =e)
+        except Exception as e:
+            messagebox.showerror(title='Error', message = 'Unknown problem', detail =e)
+        else:
+            self._init_project(job_path)
+            self.engine = None
+            messagebox.showinfo("Message", f"Job:{job_path} is created successfully")
+            if hasattr(self, 'job_window'):
+                self.job_window.destroy()
+        
         
     def _on_get_geometry_file(self, *_):
         """creates dialog to get geometry file and copies the file to project directory as coordinate.xyz"""
